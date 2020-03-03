@@ -1,0 +1,42 @@
+{
+  "version": "0.1",
+  "language": "en",
+  "words": [
+    "addopts",
+    "aenter",
+    "aexit",
+    "aiohttp",
+    "asyncio",
+    "calebcartwright",
+    "cobertura",
+    "codecov",
+    "coveragerc",
+    "coverageresults",
+    "dependabot",
+    "duplicative",
+    "filterwarnings",
+    "getcwd",
+    "junit",
+    "junitxml",
+    "pipefail",
+    "pycodestyle",
+    "pytest",
+    "pytestmark",
+    "pyyaml",
+    "rmtree",
+    "setuptools",
+    "setvariable",
+    "shutil",
+    "strftime",
+    "swellbot",
+    "symmetra",
+    "swellaby",
+    "testpaths",
+    "testresults",
+    "xunit",
+    "yamllint"
+  ],
+  "flagWords": [
+
+  ]
+}

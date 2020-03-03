@@ -1,0 +1,10 @@
+[run]
+branch = True
+source =
+omit = **/__init__.py
+
+[xml]
+output = .test-reports/coverage/unit/cobertura.xml
+
+[html]
+directory = .test-reports/coverage/unit/html
