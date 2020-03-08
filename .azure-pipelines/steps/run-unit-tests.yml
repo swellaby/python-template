@@ -14,3 +14,9 @@ steps:
       testResultsFiles: 'junit.xml'
       searchFolder: $(Build.SourcesDirectory)/.test-reports/results/unit/junit.xml
       testRunTitle: '::Unit Tests::${{ parameters.envName }}${{ parameters.envNameSuffix }} - Build $(Build.BuildId)'
+
+- task: PublishCodeCoverageResults@1
+  inputs:
+    codeCoverageTool: 'Cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/.test-reports/coverage/unit/cobertura.xml'
+  displayName: 'Publish coverage results'
