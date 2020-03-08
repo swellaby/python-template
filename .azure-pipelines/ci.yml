@@ -1,0 +1,72 @@
+trigger:
+- master
+
+pr: none
+
+pool:
+  vmImage: 'Ubuntu-18.04'
+
+resources:
+  repositories:
+  - repository: templates
+    type: github
+    name: swellaby/azure-pipelines-templates
+    endpoint: swellaby
+
+variables:
+- group: swellbot-github
+
+steps:
+- template: steps/setup.yml
+- template: templates/yml/python/steps/run-invoke.yml@templates
+  parameters:
+    tasksAndArguments: 'lint'
+    taskDisplayName: 'Lint'
+- template: templates/yml/python/steps/run-invoke.yml@templates
+  parameters:
+    tasksAndArguments: 'check-format'
+    taskDisplayName: 'Check code formatting'
+- template: 'steps/run-unit-tests.yml'
+  parameters:
+    envName: 'CI'
+    envNameSuffix: ''
+
+- script: |
+    bash <(curl -s https://codecov.io/bash) -t $(codecovToken)
+  displayName: 'Publish coverage to Codecov'
+
+- script: |
+    git checkout master
+    git config user.name $(githubUser)
+    git config user.email $(githubEmail)
+    bumpversion patch
+    export PACKAGE_VERSION=$(invoke print-version)
+    echo "##vso[task.setvariable variable=packageVersion]$PACKAGE_VERSION"
+  displayName: 'Bump version'
+
+- template: templates/yml/any/sonar/run-sonar-cloud-cli-analysis.yml@templates
+  parameters:
+    projectVersion: $(packageVersion)
+
+- script: |
+    python setup.py sdist bdist_wheel
+  displayName: 'Generate distribution archives'
+
+- script: |
+    git push https://$(githubPat)@github.com/swellaby/.git
+  displayName: 'Check-in bumped version files'
+
+- task: ArchiveFiles@2
+  displayName: 'Archive: full repo'
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)'
+    includeRootFolder: false
+    archiveType: tar
+    archiveFile: '$(sourceRepoArchivePath)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: full repo'
+  inputs:
+    PathtoPublish: '$(sourceRepoArchivePath)'
+    ArtifactName: '$(sourceRepoArtifactName)'
+
