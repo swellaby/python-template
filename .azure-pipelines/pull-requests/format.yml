@@ -14,7 +14,7 @@ resources:
     endpoint: swellaby
 
 steps:
-- template: ../steps/setup
+- template: ../steps/setup.yml
 - template: templates/yml/python/steps/run-invoke.yml@templates
   parameters:
     tasksAndArguments: 'check-format'
