@@ -1,0 +1,16 @@
+parameters:
+  envName: ''
+  envNameSuffix: ' PR'
+
+steps:
+- template: templates/yml/python/combo/run-pytest-ci.yml@templates
+  parameters:
+    test:
+      additionalArgs: 'tests/unit'
+      taskDisplayName: 'Run unit tests'
+    publishTestResults:
+      taskDisplayName: 'Publish unit test results'
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit.xml'
+      searchFolder: $(Build.SourcesDirectory)/.test-reports/results/unit/junit.xml
+      testRunTitle: '::Unit Tests::${{ parameters.envName }}${{ parameters.envNameSuffix }} - Build $(Build.BuildId)'
