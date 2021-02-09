@@ -2,6 +2,7 @@ from invoke import task
 import platform
 import os
 from shutil import rmtree
+# Insert module name on the below line
 from  import __version__
 
 
